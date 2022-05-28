@@ -18,6 +18,7 @@ dependencies:
   collection: ^1.15.0
   crypto: ^3.0.1
   http: ^0.13.0
+  mongo_dart: ^0.7.4+1
   path: ^1.8.0
   postgres: ^2.3.0
   redis: ^3.1.0

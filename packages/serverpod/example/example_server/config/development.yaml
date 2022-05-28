@@ -29,3 +29,10 @@ redis:
   host: localhost
   # user: username <-- Username is optional in Redis
   port: 8091
+
+mongodb:
+  host: localhost
+  port: 27017
+  name: example
+  user: root
+  enabled: true

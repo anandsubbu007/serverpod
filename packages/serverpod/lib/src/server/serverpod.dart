@@ -71,6 +71,9 @@ class Serverpod {
   /// The database configuration.
   late DatabaseConfig databaseConfig;
 
+  /// The database configuration.
+  late MongoDBConfig mongoDbConfig;
+
   /// Runs Serverpod with Redis enabled, true by default. If you disable Redis
   /// inter-server communication will be disabled, including messaging and
   /// global caching.
@@ -242,7 +245,16 @@ class Serverpod {
       config.dbUser,
       config.dbPass,
     );
-
+    // Setup mongoDb
+    mongoDbConfig = MongoDBConfig(
+      serializationManager,
+      config.mongoHost,
+      config.mongoPort,
+      config.mongoName,
+      config.mongoUser,
+      config.mongoPass,
+      config.mongoEnabled,
+    );
     // Setup Redis
     if (enableRedis) {
       redisController = RedisController(
@@ -262,6 +274,7 @@ class Serverpod {
       serializationManager: serializationManager,
       databaseConfig: databaseConfig,
       passwords: _passwords,
+      mongoDbConfig: mongoDbConfig,
       runMode: _runMode,
       caches: caches,
       authenticationHandler:
@@ -323,7 +336,9 @@ class Serverpod {
       if (redisController != null) {
         await redisController!.start();
       }
-
+      if (config.mongoEnabled) {
+        await mongoDbConfig.openConnection();
+      }
       // Start servers
       await _startServiceServer();
 
@@ -355,6 +370,7 @@ class Serverpod {
       port: config.servicePort,
       serializationManager: _internalSerializationManager,
       databaseConfig: databaseConfig,
+      mongoDbConfig: mongoDbConfig,
       passwords: _passwords,
       runMode: _runMode,
       name: 'Insights',

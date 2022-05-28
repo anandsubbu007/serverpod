@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:serverpod/src/database/mongo_database.dart';
 import 'package:serverpod/src/server/message_central.dart';
 import 'package:serverpod_serialization/serverpod_serialization.dart';
 import 'package:serverpod_shared/serverpod_shared.dart';
@@ -51,6 +52,9 @@ abstract class Session {
   /// Access to the database.
   late final Database db;
 
+  /// Access to the MongoDb database.
+  late final MongoDatabase mongoDb;
+
   String? _authenticationKey;
 
   /// The authentication key passed from the client.
@@ -91,7 +95,7 @@ abstract class Session {
     messages = MessageCentralAccess._(this);
 
     db = Database(session: this);
-
+    mongoDb = MongoDatabase(session: this);
     sessionLogs = server.serverpod.logManager.initializeSessionLog(this);
   }
 

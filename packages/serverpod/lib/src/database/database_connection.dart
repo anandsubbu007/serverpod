@@ -663,6 +663,7 @@ Current type was $T''');
     columnsList.remove('id');
     var ids = allValueList.map((e) => e.first).toSet();
     if (ids.contains(null) && ids.length > 1) {
+      // ignore: avoid_print
       print('Id must be null or not null for all values');
       return false;
     }

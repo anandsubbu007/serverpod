@@ -76,7 +76,16 @@ Future<void> performCreate(
     var flutterDir = Directory(p.join(projectDir.path, name + '_flutter'));
     if (verbose) print('Creating directory: ${flutterDir.path}');
     await flutterDir.create(recursive: true);
-
+    String passFroMongo = generateRandomString();
+    // : / ? # [ ] @ => Not Allowed in Mongo Password
+    passFroMongo = passFroMongo
+        .replaceAll(':', '')
+        .replaceAll('/', '')
+        .replaceAll('?', '')
+        .replaceAll('#', '')
+        .replaceAll('[', '')
+        .replaceAll(']', '')
+        .replaceAll('@', '');
     // Copy server files
     var copier = Copier(
       srcDir: Directory(
@@ -114,6 +123,10 @@ Future<void> performCreate(
         Replacement(
           slotName: 'REDIS_PASSWORD',
           replacement: generateRandomString(),
+        ),
+        Replacement(
+          slotName: 'MONGODB_PASSWORD',
+          replacement: passFroMongo,
         ),
       ],
       fileNameReplacements: [

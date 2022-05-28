@@ -25,3 +25,10 @@ database:
 redis:
   host: localhost
   port: 8091
+
+mongodb:
+  host: localhost
+  port: 27017
+  name: projectname
+  user: root
+  enabled: true
