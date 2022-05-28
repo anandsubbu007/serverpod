@@ -638,9 +638,9 @@ Current type was $T''');
   /// For most cases use the corresponding method in [Database] instead.
   /// If [id] in [TableRow] Already Exist then that row will be replaced by new value
   /// [id] must be [null] or [not-null] for all values
-  Future<bool> insertOrupdateBulk(List<TableRow> row, Table table,
+  Future<List<T>> insertOrupdateBulk<T>(List<TableRow> row, Table table,
       {required Session session, Transaction? transaction}) async {
-    if (row.isEmpty) return false;
+    if (row.isEmpty) return [];
     // Todo: To handle for list of TableRow with (not null) and without (null) id value
     var startTime = DateTime.now();
     String tbName = row.first.tableName;
@@ -665,7 +665,7 @@ Current type was $T''');
     if (ids.contains(null) && ids.length > 1) {
       // ignore: avoid_print
       print('Id must be null or not null for all values');
-      return false;
+      return [];
     }
     ids.removeWhere((e) => e.toString().toLowerCase() == 'null');
     String idText = ids.isEmpty ? '' : '"id" ,';
@@ -683,18 +683,21 @@ Current type was $T''');
     ON CONFLICT (id) DO UPDATE SET 
       ($columns) = ($excludeNames) RETURNING *;''';
 
+    List<TableRow?> list = <TableRow>[];
     try {
       var context = transaction != null
           ? transaction.postgresContext
           : postgresConnection;
-
-      var affectedRows = await context.execute(query, substitutionValues: {});
-      _logQuery(session, query, startTime, numRowsAffected: affectedRows);
-      return affectedRows == 1;
+      var result = await context.query(query, substitutionValues: {});
+      _logQuery(session, query, startTime);
+      for (var rawRow in result) {
+        list.add(_formatTableRow(tbName, rawRow.toColumnMap()));
+      }
     } catch (exception, trace) {
       _logQuery(session, query, startTime, exception: exception, trace: trace);
       rethrow;
     }
+    return list.cast<T>();
   }
 }
 
