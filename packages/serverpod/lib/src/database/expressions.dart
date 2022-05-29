@@ -97,6 +97,12 @@ class ColumnInt extends Column {
       return Expression('"$columnName" != $value');
     }
   }
+
+  /// Creates an [Expression] checking if the value Exist in List
+  /// See Postgresql docs for more info.
+  Expression contains(List<int> listOfInt, {bool isAny = true}) {
+    return Expression('"$columnName" = ANY(array$listOfInt)');
+  }
 }
 
 /// A [Column] holding an [double].
@@ -122,6 +128,12 @@ class ColumnDouble extends Column {
     } else {
       return Expression('"$columnName" != $value');
     }
+  }
+
+  /// Creates an [Expression] checking if the value Exist in List
+  /// See Postgresql docs for more info.
+  Expression contains(List<double> listOfDouble, {bool isAny = true}) {
+    return Expression('"$columnName" = ANY(array$listOfDouble)');
   }
 }
 
@@ -177,6 +189,13 @@ class ColumnString extends Column {
       operator += '*';
     }
     return Expression('"$columnName" $operator \'$regexString\'');
+  }
+
+  /// Creates an [Expression] checking if the value Exist in List
+  /// See Postgresql docs for more info.
+  Expression contains(List<String> listOfString, {bool isAny = true}) {
+    return Expression(
+        '"$columnName" = ANY(array${listOfString.map((e) => '\'$e\'').toList()})');
   }
 }
 
