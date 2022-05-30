@@ -229,7 +229,7 @@ class ObjectWithObject extends TableRow {
     return session.db.insert(row, transaction: transaction);
   }
 
-  static Future<void> insertOrupdateBulk(
+  static Future<List> insertOrupdateBulk(
     Session session,
     List<ObjectWithObject> row, {
     Transaction? transaction,

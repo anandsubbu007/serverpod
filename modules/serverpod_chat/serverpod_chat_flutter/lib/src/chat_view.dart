@@ -111,7 +111,7 @@ class _ChatViewState extends State<ChatView>
     _distanceToBottomBeforeMessageChunk =
         _scrollController.position.maxScrollExtent - _scrollController.offset;
     setState(() {});
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent -
           _distanceToBottomBeforeMessageChunk!);
       _distanceToBottomBeforeMessageChunk = null;
@@ -141,7 +141,7 @@ class _ChatViewState extends State<ChatView>
   @override
   Widget build(BuildContext context) {
     if (_messageAdded) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_offset == _maxExtent || _messageAddedByUser) {
           _scrollToBottom();
           _messageAddedByUser = false;
@@ -160,7 +160,7 @@ class _ChatViewState extends State<ChatView>
         // Start the fade in when we know we are at the bottom.
         _fadeIn();
       }
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         widget.controller.markLastMessageRead();
 
         _scrollController.jumpTo(
@@ -173,7 +173,7 @@ class _ChatViewState extends State<ChatView>
         _scrollController.offset ==
             _scrollController.position.maxScrollExtent) {
       // we are already at the bottom, mark messages as read
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         widget.controller.markLastMessageRead();
       });
     }
@@ -188,7 +188,7 @@ class _ChatViewState extends State<ChatView>
             if (_scrollController.hasClients &&
                 _scrollController.offset ==
                     _scrollController.position.maxScrollExtent) {
-              WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
                 _scrollController
                     .jumpTo(_scrollController.position.maxScrollExtent);
               });

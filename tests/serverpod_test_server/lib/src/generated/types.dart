@@ -229,7 +229,7 @@ class Types extends TableRow {
     return session.db.insert(row, transaction: transaction);
   }
 
-  static Future<void> insertOrupdateBulk(
+  static Future<List> insertOrupdateBulk(
     Session session,
     List<Types> row, {
     Transaction? transaction,

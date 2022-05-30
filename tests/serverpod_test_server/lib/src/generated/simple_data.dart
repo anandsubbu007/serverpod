@@ -160,7 +160,7 @@ class SimpleData extends TableRow {
     return session.db.insert(row, transaction: transaction);
   }
 
-  static Future<void> insertOrupdateBulk(
+  static Future<List> insertOrupdateBulk(
     Session session,
     List<SimpleData> row, {
     Transaction? transaction,
