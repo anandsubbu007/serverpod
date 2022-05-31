@@ -27,8 +27,6 @@ class Server {
   /// Current database configuration.
   DatabaseConfig databaseConfig;
 
-  /// Current database configuration.
-  MongoDBConfig mongoDbConfig;
 
   /// The [SerializationManager] used by the server.
   final SerializationManager serializationManager;
@@ -74,7 +72,6 @@ class Server {
     required this.port,
     required this.serializationManager,
     required this.databaseConfig,
-    required this.mongoDbConfig,
     required this.passwords,
     required this.runMode,
     this.authenticationHandler,

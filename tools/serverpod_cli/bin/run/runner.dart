@@ -151,17 +151,6 @@ void performRun(bool verbose, bool runDocker) async {
     return;
   }
 
-  print(
-      'Waiting for MongoDb on ${configInfo.config.mongoHost}:${configInfo.config.mongoPort}.');
-  if (!await PortScanner.waitForPort(
-    configInfo.config.mongoHost,
-    configInfo.config.mongoPort,
-    printProgress: true,
-  )) {
-    print('Failed to connect to MongoDB.');
-    return;
-  }
-
   // Start the server.
   print('Setup complete. Starting the server.');
   print('');

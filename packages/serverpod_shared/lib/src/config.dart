@@ -61,24 +61,6 @@ class ServerConfig {
   /// Authentication key for service protocol.
   late final String serviceSecret;
 
-  /// MongoDb Database host.
-  late final String mongoHost;
-
-  /// MongoDb Database port.
-  late final int mongoPort;
-
-  /// MongoDb Database user name.
-  late final String mongoUser;
-
-  /// MongoDb Database password.
-  late final String mongoPass;
-
-  /// MongoDb Database name.
-  late final String mongoName;
-
-  /// MongoDb Database IsEnabled.
-  late final bool mongoEnabled;
-
   /// Loads and parses a server configuration file. Picks config file depending
   /// on run mode.
   ServerConfig(this.runMode, this.serverId, Map<String, String> passwords)
@@ -106,19 +88,6 @@ class ServerConfig {
     dbUser = dbSetup['user']!;
     dbPass = passwords['database'] ?? 'Missing database password';
 
-    // Get mongodb database setup
-    // assert(doc['mongo'] is Map, 'Mongo Database setup is missing in config');
-    Map? mongoSetup = doc['mongodb'];
-    if (mongoSetup?['enabled'] != null) {
-      mongoHost = mongoSetup!['host']!;
-      mongoPort = mongoSetup['port']!;
-      mongoName = mongoSetup['name']!;
-      mongoUser = mongoSetup['user']!;
-      mongoPass = passwords['mongodb'] ?? 'Missing database password';
-      mongoEnabled = mongoSetup['enabled']!;
-    } else {
-      mongoEnabled = false;
-    }
     // Get Redis setup
     assert(doc['redis'] is Map, 'Redis setup is missing in config');
     Map redisSetup = doc['redis'];
@@ -145,15 +114,7 @@ class ServerConfig {
     if (redisUser != null) {
       str += '\nredis user: $redisUser';
     }
-    if (mongoEnabled) {
-      str += '\nmongoDb host: $mongoHost';
-      str += '\nmongoDb port: $mongoPort';
-      str += '\nmongoDb name: $mongoName';
-      str += '\nmongoDb user: $mongoUser';
-      str += '\nmongoDb pass: $mongoPass';
-    } else {
-      str += '\nmongoDb Not Enabled';
-    }
+
     str += '\nredis pass: ********';
 
     return str;

@@ -124,10 +124,6 @@ Future<void> performCreate(
           slotName: 'REDIS_PASSWORD',
           replacement: generateRandomString(),
         ),
-        Replacement(
-          slotName: 'MONGODB_PASSWORD',
-          replacement: passFroMongo,
-        ),
       ],
       fileNameReplacements: [
         Replacement(
