@@ -17,16 +17,23 @@ class Expression {
     return expression;
   }
 
+  Expression? _validate(Expression other) {
+    if (other.expression.isEmpty) {
+      return Expression('($this)');
+    }
+    return null;
+  }
+
   /// Database AND operator.
   Expression operator &(dynamic other) {
     assert(other is Expression);
-    return Expression('($this AND $other)');
+    return _validate(other) ?? Expression('($this AND $other)');
   }
 
   /// Database OR operator.
   Expression operator |(dynamic other) {
     assert(other is Expression);
-    return Expression('($this OR $other)');
+    return _validate(other) ?? Expression('($this OR $other)');
   }
 
   /// Database greater than operator.
@@ -86,7 +93,8 @@ class ColumnInt extends Column {
 
   /// Creates an [Expression] checking if the value in the column equals the
   /// specified value.
-  Expression equals(int? value) {
+  Expression equals(int? value, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     if (value == null) {
       return Expression('"$columnName" IS NULL');
     } else {
@@ -96,7 +104,8 @@ class ColumnInt extends Column {
 
   /// Creates an [Expression] checking if the value in the column does not equal
   /// the specified value.
-  Expression notEquals(int? value) {
+  Expression notEquals(int? value, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     if (value == null) {
       return Expression('"$columnName" IS NOT NULL');
     } else {
@@ -106,7 +115,8 @@ class ColumnInt extends Column {
 
   /// Creates an [Expression] checking if the value Exist in List
   /// See Postgresql docs for more info.
-  Expression contains(List<int> listOfInt) {
+  Expression contains(List<int> listOfInt, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     return Expression('"$columnName" = ANY(array$listOfInt)');
   }
 }
@@ -118,7 +128,8 @@ class ColumnDouble extends Column {
 
   /// Creates an [Expression] checking if the value in the column equals the
   /// specified value.
-  Expression equals(double? value) {
+  Expression equals(double? value, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     if (value == null) {
       return Expression('"$columnName" IS NULL');
     } else {
@@ -128,7 +139,8 @@ class ColumnDouble extends Column {
 
   /// Creates an [Expression] checking if the value in the column does not equal
   /// the specified value.
-  Expression notEquals(double? value) {
+  Expression notEquals(double? value, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     if (value == null) {
       return Expression('"$columnName" IS NOT NULL');
     } else {
@@ -151,7 +163,8 @@ class ColumnString extends Column {
 
   /// Creates an [Expression] checking if the value in the column equals the
   /// specified value.
-  Expression equals(String? value) {
+  Expression equals(String? value, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     if (value == null) {
       return Expression('"$columnName" IS NULL');
     } else {
@@ -162,7 +175,8 @@ class ColumnString extends Column {
 
   /// Creates an [Expression] checking if the value in the column does not equal
   /// the specified value.
-  Expression notEquals(String? value) {
+  Expression notEquals(String? value, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     if (value == null) {
       return Expression('"$columnName" IS NOT NULL');
     } else {
@@ -173,7 +187,8 @@ class ColumnString extends Column {
 
   /// Creates an [Expression] checking if the value in the column is LIKE the
   /// specified value. See Postgresql docs for more info on the LIKE operator.
-  Expression like(String value) {
+  Expression like(String value, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     return Expression(
         '"$columnName" LIKE ${DatabaseConfig.encoder.convert(value)}');
   }
@@ -181,7 +196,8 @@ class ColumnString extends Column {
   /// Creates an [Expression] checking if the value in the column is LIKE the
   /// specified value but ignoring case. See Postgresql docs for more info on
   /// the ILIKE operator.
-  Expression ilike(String value) {
+  Expression ilike(String value, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     return Expression(
         '"$columnName" ILIKE ${DatabaseConfig.encoder.convert(value)}');
   }
@@ -189,7 +205,8 @@ class ColumnString extends Column {
   /// Creates an [Expression] checking if the value in the column Matches Regex.
   /// See Postgresql docs for more info on the Regex.
   Expression regex(String regexString,
-      {bool caseSensitive = true, bool notMatch = false}) {
+      {bool caseSensitive = true, bool notMatch = false, bool enabled = true}) {
+    if (!enabled) return Expression('');
     String operator = notMatch ? '!~' : '~';
     if (!caseSensitive) {
       operator += '*';
@@ -199,7 +216,9 @@ class ColumnString extends Column {
 
   /// Creates an [Expression] checking if the value Exist in List
   /// See Postgresql docs for more info.
-  Expression contains(List<String> listOfString, {bool isAny = true}) {
+  Expression contains(List<String> listOfString,
+      {bool isAny = true, bool enabled = true}) {
+    if (!enabled) return Expression('');
     return Expression(
         '"$columnName" = ANY(array${listOfString.map((e) => '\'$e\'').toList()})');
   }
@@ -212,7 +231,8 @@ class ColumnBool extends Column {
 
   /// Creates an [Expression] checking if the value in the column equals the
   /// specified value.
-  Expression equals(bool? value) {
+  Expression equals(bool? value, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     if (value == null) {
       return Expression('"$columnName" IS NULL');
     } else {
@@ -222,7 +242,8 @@ class ColumnBool extends Column {
 
   /// Creates an [Expression] checking if the value in the column does not equal
   /// the specified value.
-  Expression notEquals(bool? value) {
+  Expression notEquals(bool? value, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     if (value == null) {
       return Expression('"$columnName" IS NOT NULL');
     } else {
@@ -232,7 +253,8 @@ class ColumnBool extends Column {
 
   /// Creates an [Expression] checking if the value in the column is distinct
   /// from the specified value.
-  Expression isDistinctFrom(bool value) {
+  Expression isDistinctFrom(bool value, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     return Expression('"$columnName" IS DISTINCT FROM $value');
   }
 }
@@ -245,7 +267,8 @@ class ColumnDateTime extends Column {
 
   /// Creates an [Expression] checking if the value in the column equals the
   /// specified value.
-  Expression equals(DateTime? value) {
+  Expression equals(DateTime? value, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     if (value == null) {
       return Expression('"$columnName" IS NULL');
     } else {
@@ -256,7 +279,8 @@ class ColumnDateTime extends Column {
 
   /// Creates an [Expression] checking if the value in the column does not equal
   /// the specified value.
-  Expression notEquals(DateTime? value) {
+  Expression notEquals(DateTime? value, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     if (value == null) {
       return Expression('"$columnName" IS NOT NULL');
     } else {
