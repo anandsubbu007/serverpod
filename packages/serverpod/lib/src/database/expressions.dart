@@ -19,7 +19,9 @@ class Expression {
 
   Expression _getvalidExpression(
       Expression one, Expression two, String operator) {
-    if (one.expression.isEmpty) {
+    if (one.expression.isEmpty && two.expression.isEmpty) {
+      return Expression('');
+    } else if (one.expression.isEmpty) {
       return Expression('($two)');
     } else if (two.expression.isEmpty) {
       return Expression('($one)');
@@ -84,7 +86,8 @@ abstract class Column extends Expression {
 
   /// Creates an [Expression] to Add custom where query
   /// See Postgresql docs for more info.
-  Expression whereQuery(String query) {
+  Expression whereQuery(String query, [bool enabled = true]) {
+    if (!enabled) return Expression('');
     return Expression('"$columnName" = $query');
   }
 }
