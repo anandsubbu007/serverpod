@@ -27,7 +27,6 @@ class Server {
   /// Current database configuration.
   DatabaseConfig databaseConfig;
 
-
   /// The [SerializationManager] used by the server.
   final SerializationManager serializationManager;
 
@@ -244,6 +243,11 @@ class Server {
       return;
     } else if (result is ResultStatusCode) {
       request.response.statusCode = result.statusCode;
+      await request.response.close();
+      return;
+    } else if (result is ServerpodServerException) {
+      request.response.statusCode = result.statusCode;
+      request.response.write(result.toJson());
       await request.response.close();
       return;
     } else if (result is ResultSuccess) {
